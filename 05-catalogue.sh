@@ -78,7 +78,7 @@ validate $? "aDDINIG MONGODB"
 dnf install mongodb-mongosh -y
 validate $? "Installing the mongodb client"
 
-product_count=$(mongosh --host mongodb.$domain_name --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()') 2>> $log_file
+product_count=$(mongosh --host "mongodb.$domain_name" --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()') 2>> $log_file
 validate $? "Connecting to mongodb"
 if [ "$product_count" -eq 0 ] ; then
     mongosh --host "mongodb.$domain_name" </app/db/master-data.js
