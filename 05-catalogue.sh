@@ -78,6 +78,8 @@ validate $? "aDDINIG MONGODB"
 dnf install mongodb-mongosh -y
 validate $? "Installing the mongodb client"
 
+mongosh --host "mongodb.$domain_name" </app/db/master-data.js
+
 
 
 
