@@ -56,6 +56,6 @@ validate $? "enable and start MongoDb"
 sed -i 's/127.0.0.0/0.0.0.0/g' /etc/mongod.conf
 validate $? "chnaging the ip to 0.0.0.0"
 
-systemctl restart mongodb 
+systemctl restart mongod 
 validate $? "mongodb restart"
 
