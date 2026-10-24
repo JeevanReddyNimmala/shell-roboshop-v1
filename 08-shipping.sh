@@ -40,14 +40,7 @@ validate $? "Enable Java"
 dnf install maven java-25-openjdk-devel -y &>> $ log_file
 validate $? "Install Java"
 
-id roboshop &>> $log_file
-if [ $? -ne 0 ]; then
-    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-    validate $? "creating user for User"
-else
-    echo  -e "$(timestamp) [INFO]  User aleady exists ...${Y}SKIPPING${N}"
 
-fi 
 
 
 
