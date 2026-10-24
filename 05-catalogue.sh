@@ -2,6 +2,7 @@
 user_id=$(id -u)
 log_folder="/var/log/shell_practice"
 log_file="${log_folder}/${0}.log"
+domain_name="jsrgroup.online"
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
@@ -48,6 +49,28 @@ else
     echo  -e "$(timestamp) [INFO] Catalogue user aleady exists ...${Y}SKIPPING${N}"
 
 fi 
+
+mkdir -p /app
+validate $? "Creating App directory"
+
+curl -L -o /tmp/catalogue.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/catalogue-v4.zip
+validate $? "downloading the Catalogue"
+
+cd /app
+unzip /tmp/catalogue.zip
+validate $? "unziping the application"
+
+cd /app
+npm install
+validate $? "Installing dependencies"
+
+sed -i "s/DOMAIN_NAME/$domain_name" catalogue.service
+cp catalogue.service /etc/systemd/system/catalogue.service
+
+systemctl daemon-reload
+systemctl enable catalogue
+systemctl start catalogue
+
 
 
 
