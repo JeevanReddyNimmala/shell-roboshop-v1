@@ -40,7 +40,7 @@ validate $? "Enable nodejs"
 dnf install nodejs -y
 validate $? "Install nodejs" &>> $log_file
 
-cataloguemqctl list_users | grep -qw "roboshop"
+id roboshop &>> $log_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
     validate $? "creating user for Catalogue"
