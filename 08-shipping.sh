@@ -34,13 +34,14 @@ fi
 echo "$(timestamp) [INFO]   =====Script Started Execution ====" | tee -a $log_file
 
 
-dnf module enable maven:3.9 -y &>> $ log_file
-validate $? "Enable Java"
 
-dnf install maven java-25-openjdk-devel -y &>> $ log_file
-validate $? "Install Java"
+#validate $? "Enable Java"
 
 
+#validate $? "Install Java"
+
+dnf module enable maven:3.9 -y
+dnf install maven java-25-openjdk-devel -y
 
 
 
