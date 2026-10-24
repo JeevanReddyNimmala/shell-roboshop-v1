@@ -46,7 +46,7 @@ if [ $? -ne 0 ]; then
     rabbitmqctl add_user roboshop roboshop123 &>> $log_file
     validate $? "creating user for RabbitMQ"
 else
-    echo  -e "$(timestamp) [INFO] RabbitMQ user aleady exists ...${Y}SKIPPING{N}"
+    echo  -e "$(timestamp) [INFO] RabbitMQ user aleady exists ...${Y}SKIPPING${N}"
 
 fi    
 
