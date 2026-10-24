@@ -3,6 +3,7 @@ user_id=$(id -u)
 log_folder="/var/log/shell_practice"
 log_file="${log_folder}/${0}.log"
 domain_name="jsrgroup.online"
+scripts_dir=$( dirname "$(realpath "$0")")
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
@@ -26,8 +27,8 @@ validate (){
     exit 1
 else
     echo  -e "$(timestamp) [INFO] ${2} .. ${G}SUCCUSS${N}" | tee -a $log_file
-}
 fi
+}
 
  
 echo "$(timestamp) [INFO]   =====Script Started Execution ====" | tee -a $log_file
@@ -64,7 +65,7 @@ cd /app
 npm install
 validate $? "Installing dependencies"
 
-sed -i "s/DOMAIN_NAME/$domain_name" catalogue.service
+sed -i "s/DOMAIN_NAME/$domain_name" "$strips_dir/catalogue.service"
 cp catalogue.service /etc/systemd/system/catalogue.service
 
 systemctl daemon-reload
