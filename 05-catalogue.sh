@@ -26,8 +26,8 @@ validate (){
     exit 1
 else
     echo  -e "$(timestamp) [INFO] ${2} .. ${G}SUCCUSS${N}" | tee -a $log_file
-fi
 }
+fi
 
  
 echo "$(timestamp) [INFO]   =====Script Started Execution ====" | tee -a $log_file
