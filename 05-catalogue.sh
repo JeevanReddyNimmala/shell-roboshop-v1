@@ -65,7 +65,7 @@ cd /app
 npm install
 validate $? "Installing dependencies"
 
-sed -i "s/DOMAIN_NAME/$domain_name" "$strips_dir/catalogue.service"
+sed -i "s/DOMAIN_NAME/$domain_name/g" "$strips_dir/catalogue.service"
 cp $strips_dir/catalogue.service /etc/systemd/system/catalogue.service
 
 systemctl daemon-reload
