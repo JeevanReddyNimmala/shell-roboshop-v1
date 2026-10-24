@@ -53,7 +53,7 @@ systemctl enable mongod &>> $log_file
 systemctl start mongod &>> $log_file
 validate $? "enable and start MongoDb"
 
-sed -i 's/127.0.0.0/0.0.0.0/g' /etc/mongod.conf
+sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf
 validate $? "chnaging the ip to 0.0.0.0"
 
 systemctl restart mongod 
