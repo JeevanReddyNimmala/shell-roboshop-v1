@@ -33,17 +33,53 @@ fi
  
 echo "$(timestamp) [INFO]   =====Script Started Execution ====" | tee -a $log_file
 
+dnf module enable maven:3.9 -y &>> $log_file
+validate $? "Enable Java"
+dnf install maven java-25-openjdk-devel -y &>> $log_file
+validate $? "Install Java"
+alternatives --set  java "/usr/lib/jvm/java-25-openjdk/bin/java)"
+validate $? "Setting Java 25 as default version for installing and usage"
 
+echo "export JAVA_HOME=$(dirname $(dirname $(readlink -f /usr/bin/java)))" > /etc/profile.d/java.sh
+source /etc/profile.d/java.sh
+echo $JAVA_HOME
 
-#validate $? "Enable Java"
+validate $? "setting JAVA_Home for maven"
 
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
 
-#validate $? "Install Java"
+rm -rf /app
+mkdir -p /app
+validate $? "Creating App directory"
 
-dnf module enable maven:3.9 -y
-dnf install maven java-25-openjdk-devel -y
+curl -L -o /tmp/shipping.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/shipping-v4.zip
+validate $? "downloading the Shipping"
 
+cd /app
+unzip /tmp/shipping.zip
 
+validate $? "unziping the Shipping"
+
+cd /app
+mvn clean package
+validate $? "Installing de pendencies"
+
+mv target/shipping.jar shipping.jar
+validate $? "moving shipping.jar file"
+
+dnf install mysql -y &>> $log_file
+validate $? "Insatlling mysql client"
+
+mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/master-data.sql
+validate $? "loading shipping data"
+mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/app-user.sql
+validate $? "loading user data"
+
+systemctl daemon-reload
+systemctl enable shipping
+validate $? "enabled shipping"
+systemctl start shipping
+validate $? "Start Shipping"
 
 
 echo "$(timestamp) Script completed in: $SECONDS seconds"
