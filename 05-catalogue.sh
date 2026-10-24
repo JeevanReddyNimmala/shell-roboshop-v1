@@ -50,7 +50,7 @@ else
     echo  -e "$(timestamp) [INFO] Catalogue user aleady exists ...${Y}SKIPPING${N}"
 
 fi 
-
+rm -rf /app
 mkdir -p /app
 validate $? "Creating App directory"
 
