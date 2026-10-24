@@ -69,8 +69,11 @@ sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/catalogue.service"
 cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalogue.service
 
 systemctl daemon-reload &>> $log_file
+validate $? "daemon reloaded"
 systemctl enable catalogue &>> $log_file
+validate $? "Enabled the catalogue"
 systemctl start catalogue &>> $log_file
+validate $? "Stated catalogue"
 
 cp "$scripts_dir/mongo.repo" /etc/yum.repos.d/mongo.repo
 validate $? "aDDINIG MONGODB"
