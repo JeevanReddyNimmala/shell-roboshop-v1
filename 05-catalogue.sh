@@ -3,7 +3,7 @@ user_id=$(id -u)
 log_folder="/var/log/shell_practice"
 log_file="${log_folder}/${0}.log"
 domain_name="jsrgroup.online"
-scripts_dir=$( dirname "$(realpath "$0")")
+scripts_dir=$(dirname "$(realpath "$0")")
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
@@ -65,8 +65,8 @@ cd /app
 npm install &>> $log_file
 validate $? "Installing dependencies"
 
-sed -i "s/DOMAIN_NAME/$domain_name/g" "$strips_dir/catalogue.service"
-cp "$strips_dir/catalogue.service" /etc/systemd/system/catalogue.service
+sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/catalogue.service"
+cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalogue.service
 
 systemctl daemon-reload &>> $log_file
 systemctl enable catalogue &>> $log_file
