@@ -88,7 +88,7 @@ if [ -z "$count"] || [ "$count" -eq 0 ] ; then
     validate $? "loading shipping data"
     
 else
-    echo "$(timestamp)[INFO] Master Data already loaded ${Y}SKIPPING${N}"
+    echo -e "$(timestamp)[INFO] Master Data already loaded ... ${Y}SKIPPING${N}"
 fi
 #sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/shippinig.service"
 #cp "$scripts_dir/shipping.service" /etc/systemd/system/shipping.service
