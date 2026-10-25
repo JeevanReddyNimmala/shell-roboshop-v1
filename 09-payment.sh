@@ -67,5 +67,12 @@ validate $? "insatalling dependencies"
 sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/payment.service"
 cp "$scripts_dir/payment.service" /etc/systemd/system/payment.service
 
+systemctl daemon-reload
+validate $? "daemon-reload"
+systemctl enable payment
+validate $? "Enable Payment"
+systemctl restart payment
+validate $? "Start/Restarting the Payment"
+
 echo "$(timestamp) Script completed in: $SECONDS seconds"
 echo "$(timestamp) [INFO]   =====Script Completed Execution ====" | tee -a $log_file
