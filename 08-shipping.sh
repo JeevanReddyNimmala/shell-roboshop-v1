@@ -75,8 +75,8 @@ mv target/shipping.jar shipping.jar &>> $log_file
 validate $? "moving shipping.jar file"
 
 
-sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/catalogue.service"
-cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalague.service
+sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/shipping.service"
+cp "$scripts_dir/shipping.service" /etc/systemd/system/shipping.service
 
 dnf install mysql -y &>> $log_file
 validate $? "Insatlling mysql client"
