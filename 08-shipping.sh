@@ -75,8 +75,8 @@ mv target/shipping.jar shipping.jar &>> $log_file
 validate $? "moving shipping.jar file"
 
 
-#sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/catalogue.service"
-#cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalague.service
+sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/catalogue.service"
+cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalague.service
 
 dnf install mysql -y &>> $log_file
 validate $? "Insatlling mysql client"
@@ -86,8 +86,8 @@ validate $? "loading shipping data"
 mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/app-user.sql &>> $log_file
 validate $? "loading user data"
 
-sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/shippinig.service"
-cp "$scripts_dir/shipping.service" /etc/systemd/system/shipping.service
+#sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/shippinig.service"
+#cp "$scripts_dir/shipping.service" /etc/systemd/system/shipping.service
 
 systemctl daemon-reload &>> $log_file
 systemctl enable shipping &>> $log_file
