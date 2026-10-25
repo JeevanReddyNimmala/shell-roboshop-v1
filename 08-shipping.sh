@@ -37,7 +37,7 @@ dnf module enable maven:3.9 -y &>> $log_file
 validate $? "Enable Java"
 dnf install maven java-25-openjdk-devel -y &>> $log_file
 validate $? "Install Java"
-alternatives --set  java "/usr/lib/jvm/java-25-openjdk/bin/java"
+alternatives --set  java "/usr/lib/jvm/java-25-openjdk/bin/java" &>> $log_file
 validate $? "Setting Java 25 as default version for installing and usage"
 
 echo "export JAVA_HOME=$(dirname $(dirname $(readlink -f /usr/bin/java)))" > /etc/profile.d/java.sh
@@ -46,39 +46,50 @@ echo $JAVA_HOME
 
 validate $? "setting JAVA_Home for maven"
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+id roboshop &>> $log_file
+if [ $? -ne 0 ]; then
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+    validate $? "creating user for Shipping"
+else
+    echo  -e "$(timestamp) [INFO]  User aleady exists ...${Y}SKIPPING${N}"
+
+fi 
 
 rm -rf /app
 mkdir -p /app
 validate $? "Creating App directory"
 
-curl -L -o /tmp/shipping.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/shipping-v4.zip
+curl -L -o /tmp/shipping.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/shipping-v4.zip &>> $log_file
 validate $? "downloading the Shipping"
 
 cd /app
-unzip /tmp/shipping.zip
+unzip /tmp/shipping.zip &>> $log_file
 
 validate $? "unziping the Shipping"
 
 cd /app
-mvn clean package
+mvn clean package &>> $log_file
 validate $? "Installing de pendencies"
 
-mv target/shipping.jar shipping.jar
+mv target/shipping.jar shipping.jar &>> $log_file
 validate $? "moving shipping.jar file"
+
+
+sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/catalogue.service"
+cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalague.service
 
 dnf install mysql -y &>> $log_file
 validate $? "Insatlling mysql client"
 
-mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/master-data.sql
+mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/master-data.sql &>> $log_file
 validate $? "loading shipping data"
-mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/app-user.sql
+mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/app-user.sql &>> $log_file
 validate $? "loading user data"
 
-systemctl daemon-reload
-systemctl enable shipping
+systemctl daemon-reload &>> $log_file
+systemctl enable shipping &>> $log_file
 validate $? "enabled shipping"
-systemctl start shipping
+systemctl start shipping &>> $log_file
 validate $? "Start Shipping"
 
 
