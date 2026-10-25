@@ -81,13 +81,19 @@ cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalague.service
 dnf install mysql -y &>> $log_file
 validate $? "Insatlling mysql client"
 
-mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/master-data.sql &>> $log_file
-validate $? "loading shipping data"
-mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/app-user.sql &>> $log_file
-validate $? "loading user data"
-
+count=$(mysql -h "mysql.$domain_name" -u root pRoboShop@1 -N -B -e "SELECT COUNT (*) FROM cities.cities;" 2>> $log_file)
+if [ -z "$count"] || [ "$count" -eq 0 ] ; then 
+    mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/master-data.sql &>> $log_file
+    validate $? "loading shipping data"
+    
+else
+    echo "$(timestamp)[INFO] Master Data already loaded ${Y}SKIPPING${N}"
+fi
 #sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/shippinig.service"
 #cp "$scripts_dir/shipping.service" /etc/systemd/system/shipping.service
+
+mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/app-user.sql &>> $log_file
+    validate $? "loading user data"
 
 systemctl daemon-reload &>> $log_file
 systemctl enable shipping &>> $log_file
@@ -95,6 +101,8 @@ validate $? "enabled shipping"
 systemctl start shipping &>> $log_file
 validate $? "Start Shipping"
 
+systemctl restart shipping &>> $log_file
+validate $? "Re-Started Shipping"
 
 echo "$(timestamp) Script completed in: $SECONDS seconds"
 echo "$(timestamp) [INFO]   =====Script Completed Execution ====" | tee -a $log_file
