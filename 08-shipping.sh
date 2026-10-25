@@ -81,7 +81,8 @@ cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalague.service
 dnf install mysql -y &>> $log_file
 validate $? "Insatlling mysql client"
 
-count=$(mysql -h "mysql.$domain_name" -u root pRoboShop@1 -N -B -e "SELECT COUNT (*) FROM cities.cities;" 2>> $log_file)
+count=$(mysql -h "mysql.$domain_name" -u root -pRoboShop@1 -N -B -e "SELECT COUNT(*) FROM cities.cities;" 2>> $log_file)
+
 if [ -z "$count"] || [ "$count" -eq 0 ] ; then 
     mysql -h mysql.$domain_name -uroot -pRoboShop@1 < /app/db/master-data.sql &>> $log_file
     validate $? "loading shipping data"
