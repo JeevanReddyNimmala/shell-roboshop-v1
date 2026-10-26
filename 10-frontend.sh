@@ -56,7 +56,7 @@ unzip /tmp/frontend.zip &>> $log_file
 validate $? "unzipping fornt end code"
 
 sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/roboshop.conf"
-cp "$scripts_dir/roboshop.conf" /etc/systemd/system/roboshop.conf
+cp "$scripts_dir/roboshop.conf" /etc/nginx/default.d/roboshop.conf
 validate $? "validate copied roboshop config"
 
 nginx -t &>> $log_file
