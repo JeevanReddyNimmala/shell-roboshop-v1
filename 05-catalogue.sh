@@ -84,7 +84,7 @@ validate $? "Installing the mongodb client"
 product_count=$(mongosh --host "mongodb.$domain_name" --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()') 2>> $log_file
 validate $? "Connecting to mongodb"
 if [ "$product_count" -eq 0 ] ; then
-    mongosh --host "mongodb.$domain_name" </app/db/master-data.js
+         
     validate $? "loading the data"
 else
     echo -e "$(timesamp)[INFO] Products are already loaded ${Y}SKIPPING${N}"

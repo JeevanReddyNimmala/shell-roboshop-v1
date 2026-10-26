@@ -24,25 +24,6 @@ else
 fi
 }
 
-for package in $@
-do
-    dnf list installed ${package} &>> $log_file
-  
-    if [ $? -ne 0 ]; then
-    echo "going to istall ${package}"
-    dnf install ${package} -y &>> $log_file
-    echo "dnf install ${package} -y &>> $log_file"
-    validate $? "intalling ${package}"
-    else
-    echo -e "${package} already insttalled....${Y}SKIPPING${N}"
-    fi
-done
- 
-echo "script completed ececution at $(date +"%F %T")"
-
-echo "$log_folder"
-echo "$log_file"
-
 cp mongo.repo /etc/yum.repos.d/mongo.repo
 validate $? "adding mango repo"
 
